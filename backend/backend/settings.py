@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'todo',  # Your custom app
     'rest_framework',  # Django REST framework
     'corsheaders',  # Cross-Origin Resource Sharing
+    'rest_framework_simplejwt.token_blacklist'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Todo',  # Replace with your database name
+        'NAME': 'test',  # Replace with your database name
         'USER': 'root',     # Replace with your MySQL username
         'PASSWORD': 'sagat',     # Replace with your MySQL password
         'HOST': 'localhost',
@@ -138,3 +139,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://192.168.1.76:3000",  # Network address
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+# Optional: Customize JWT settings
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}

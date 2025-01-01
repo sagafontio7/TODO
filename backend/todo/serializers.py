@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from .models import Todo
+from .models import Todo,User
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
@@ -10,3 +12,21 @@ class TodoSerializer(serializers.ModelSerializer):
         instance.is_complete = validated_data.get('is_complete', instance.is_complete)
         instance.save()
         return instance
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)  # Ensure password is write-only
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+
+    def create(self, validated_data):
+        """
+        Override the create method to hash the password.
+        """
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user

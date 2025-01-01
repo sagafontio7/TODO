@@ -7,3 +7,13 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
+class User(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+    phone = models.CharField(max_length=10, null=True)
+    country = models.CharField(max_length=63)
+
+    def __str__(self) -> str:
+        return self.name
