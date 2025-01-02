@@ -18,8 +18,17 @@ def register(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({"message": "User registered successfully.", "user": serializer.data}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "message": "User registered successfully.",
+            "user": serializer.data
+        }, status=status.HTTP_201_CREATED)
+    else:
+        # Debug the serializer errors
+        print(serializer.errors)  # This will print the errors in your terminal or logs.
+        return Response({
+            "message": "Registration failed",
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def login(request):
